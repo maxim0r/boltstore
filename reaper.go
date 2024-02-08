@@ -77,7 +77,7 @@ func (s *BoltStore) worker(ctx context.Context) {
 			if len(expiredSessionKeys) > 0 {
 				// Remove the expired sessions from the database
 				err = s.db.Update(func(txu *bolt.Tx) error {
-					// Get the bucket
+
 					b := txu.Bucket(s.options.BucketName)
 					if b == nil {
 						return nil
@@ -85,7 +85,7 @@ func (s *BoltStore) worker(ctx context.Context) {
 
 					// Remove all expired sessions in the slice
 					for _, key := range expiredSessionKeys {
-						err = b.Delete(key)
+						err = b.DeleteBucket(key)
 						if err != nil {
 							return err
 						}
